@@ -5,8 +5,9 @@
  */
 package musicinformationclient;
 
+import java.util.Scanner;
+
 /**
- *
  * @author DinhSang
  */
 public class MusicInformationClient {
@@ -15,7 +16,22 @@ public class MusicInformationClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        SocketClient client = new SocketClient("127.0.0.1", 5000, new SocketClient.Result() {
+            @Override
+            public void result(String mes) {
+                System.err.println(mes);
+            }
+        });
+
+
+        Scanner scanner = new Scanner(System.in);
+        String line = "";
+        while (!line.equals("Over")) {
+            line = scanner.nextLine();
+            client.send(line);
+        }
+
+        client.closeSocket();
     }
-    
+
 }
