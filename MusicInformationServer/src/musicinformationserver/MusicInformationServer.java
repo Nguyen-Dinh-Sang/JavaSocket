@@ -5,6 +5,8 @@
  */
 package musicinformationserver;
 
+import musicinformationserver.socket.SocketServer;
+
 /**
  *
  * @author DinhSang
@@ -15,7 +17,7 @@ public class MusicInformationServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        SocketServer server = new SocketServer(5000);
     }
     
 }
