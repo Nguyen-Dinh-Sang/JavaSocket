@@ -5,6 +5,8 @@
  */
 package musicinformationclient;
 
+import musicinformationclient.socket.SocketClient;
+
 import java.util.Scanner;
 
 /**
@@ -19,7 +21,12 @@ public class MusicInformationClient {
         SocketClient client = new SocketClient("127.0.0.1", 5000, new SocketClient.Result() {
             @Override
             public void result(String mes) {
-                System.err.println(mes);
+                System.out.println(mes);
+            }
+
+            @Override
+            public void closed() {
+                System.out.println("Disconnect");
             }
         });
 
