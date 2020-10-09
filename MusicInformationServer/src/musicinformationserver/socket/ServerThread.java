@@ -34,11 +34,11 @@ public class ServerThread implements Runnable {
                 try {
                     data = in.readLine();
                     System.out.println("Server received " + clientCount + ": " + data);
-                    out.write("ok");
+                    out.write("OK client " + clientCount);
                     out.newLine();
                     out.flush();
                 } catch (IOException e) {
-                    System.err.println("Lost connection");
+                    System.err.println(clientCount +  " Lost connection");
                     closeServerThread();
                 }
             }

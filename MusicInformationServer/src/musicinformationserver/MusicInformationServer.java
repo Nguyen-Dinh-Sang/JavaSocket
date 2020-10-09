@@ -19,12 +19,6 @@ public class MusicInformationServer {
     public static void main(String[] args) {
         SocketServer server = new SocketServer(5000);
         server.startServer();
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        server.closeServer();
     }
     
 }
