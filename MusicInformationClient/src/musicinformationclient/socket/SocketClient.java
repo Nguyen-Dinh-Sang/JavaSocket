@@ -1,20 +1,18 @@
 package musicinformationclient.socket;
 
+import musicinformationclient.ByteUtil;
+
 import java.io.*;
 import java.net.Socket;
 
 public class SocketClient {
     private Socket socket;
-    private BufferedWriter out;
-    private BufferedReader in;
     private Result result;
-    private String address;
-    private int port;
+    private OutputStream outputStream;
+    private InputStream inputStream;
 
     public SocketClient(String address, int port, Result result) {
         this.result = result;
-        this.address = address;
-        this.port = port;
         openSocket(address, port);
     }
 
@@ -26,8 +24,8 @@ public class SocketClient {
                 System.err.println("Connected to server");
             }
 
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            outputStream = socket.getOutputStream();
+            inputStream = socket.getInputStream();
         } catch (IOException ex) {
             System.err.println("Lost connection");
             System.out.println("Reconnection");
@@ -38,8 +36,8 @@ public class SocketClient {
     public void closeSocket() {
         System.out.println("Closing connection");
         try {
-            in.close();
-            out.close();
+            inputStream.close();
+            outputStream.close();
             socket.close();
             System.err.println("Connection closed");
             result.closed();
@@ -51,9 +49,9 @@ public class SocketClient {
     public void send(String message) {
         try {
             System.out.println("Send: " + message);
-            out.write(message);
-            out.newLine();
-            out.flush();
+            byte[] data = ByteUtil.getByteUTF16(message);
+            outputStream.write(data, 0, data.length);
+            outputStream.flush();
             listening();
         } catch (IOException ex) {
             closeSocket();
@@ -61,13 +59,11 @@ public class SocketClient {
     }
 
     private void listening() {
-        String line = null;
         try {
-            line = in.readLine();
-            if (line != null) {
-                System.err.println("Result: " + line);
-                result.result(line);
-            }
+            byte[] data = new byte[1024*64];
+            inputStream.read(data);
+            String message = ByteUtil.getStringUTF16(data);
+            result.result(message);
         } catch (IOException e) {
             closeSocket();
         }
