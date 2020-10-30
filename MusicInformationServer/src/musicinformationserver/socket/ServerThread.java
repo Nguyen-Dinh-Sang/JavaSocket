@@ -1,10 +1,9 @@
 package musicinformationserver.socket;
 
-import musicinformationserver.ByteUtil;
+import musicinformationserver.util.ByteUtil;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServerThread implements Runnable {
@@ -12,8 +11,8 @@ public class ServerThread implements Runnable {
     private int clientCount;
     private Thread worker;
     private AtomicBoolean running = new AtomicBoolean(false);
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    private DataInputStream dataInputStream;
+    private DataOutputStream dataOutputStream;
 
     public ServerThread(Socket socket, int clientCount) {
         this.socket = socket;
@@ -27,23 +26,24 @@ public class ServerThread implements Runnable {
             System.err.println("Client " + clientCount + " accepted");
 
             try {
-                outputStream = socket.getOutputStream();
-                inputStream = socket.getInputStream();
+                dataInputStream = new DataInputStream(socket.getInputStream());
+                dataOutputStream = new DataOutputStream(socket.getOutputStream());
             } catch (IOException e) {
             }
 
             while (running.get()) {
                 try {
-                    byte[] data = new byte[1024*64];
-                    inputStream.read(data);
+                    byte[] data = new byte[dataInputStream.readInt()];
+                    dataInputStream.readFully(data);
                     String message = ByteUtil.getStringUTF16(data);
 
                     System.out.println("Server received " + ": " + message);
 
                     String result = "OK client " + clientCount;
                     byte[] dataResult = ByteUtil.getByteUTF16(result);
-                    outputStream.write(dataResult, 0, dataResult.length);
-                    outputStream.flush();
+                    dataOutputStream.writeInt(dataResult.length);
+                    dataOutputStream.write(dataResult);
+                    dataOutputStream.flush();
                 } catch (IOException e) {
                     System.err.println(clientCount +  " Lost connection");
                     closeServerThread();
@@ -58,8 +58,8 @@ public class ServerThread implements Runnable {
 
             running.set(false);
             try {
-                inputStream.close();
-                outputStream.close();
+                dataOutputStream.close();
+                dataInputStream.close();
                 socket.close();
             } catch (IOException e) {
             }

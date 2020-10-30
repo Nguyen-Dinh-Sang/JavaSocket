@@ -8,8 +8,8 @@ import java.net.Socket;
 public class SocketClient {
     private Socket socket;
     private Result result;
-    private OutputStream outputStream;
-    private InputStream inputStream;
+    private DataOutputStream dataOutputStream;
+    private DataInputStream dataInputStream;
 
     public SocketClient(String address, int port, Result result) {
         this.result = result;
@@ -24,8 +24,8 @@ public class SocketClient {
                 System.err.println("Connected to server");
             }
 
-            outputStream = socket.getOutputStream();
-            inputStream = socket.getInputStream();
+            dataInputStream = new DataInputStream(socket.getInputStream());
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
         } catch (IOException ex) {
             System.err.println("Lost connection");
             System.out.println("Reconnection");
@@ -36,8 +36,8 @@ public class SocketClient {
     public void closeSocket() {
         System.out.println("Closing connection");
         try {
-            inputStream.close();
-            outputStream.close();
+            dataInputStream.close();
+            dataOutputStream.close();
             socket.close();
             System.err.println("Connection closed");
             result.closed();
@@ -50,8 +50,9 @@ public class SocketClient {
         try {
             System.out.println("Send: " + message);
             byte[] data = ByteUtil.getByteUTF16(message);
-            outputStream.write(data, 0, data.length);
-            outputStream.flush();
+            dataOutputStream.writeInt(data.length);
+            dataOutputStream.write(data);
+            dataOutputStream.flush();
             listening();
         } catch (IOException ex) {
             closeSocket();
@@ -60,8 +61,8 @@ public class SocketClient {
 
     private void listening() {
         try {
-            byte[] data = new byte[1024*64];
-            inputStream.read(data);
+            byte[] data = new byte[dataInputStream.readInt()];
+            dataInputStream.readFully(data);
             String message = ByteUtil.getStringUTF16(data);
             result.result(message);
         } catch (IOException e) {
