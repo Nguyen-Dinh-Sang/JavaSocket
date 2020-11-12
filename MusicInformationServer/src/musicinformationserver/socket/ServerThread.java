@@ -1,22 +1,25 @@
 package musicinformationserver.socket;
 
-import musicinformationserver.util.ByteUtil;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
+import musicinformationserver.service.Service;
+import musicinformationserver.util.ByteUtil;
 
-public class ServerThread implements Runnable {
+public class ServerThread implements Runnable, Service.TuongTac {
+
     private Socket socket;
     private int clientCount;
     private Thread worker;
     private AtomicBoolean running = new AtomicBoolean(false);
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
+    private Service service;
 
     public ServerThread(Socket socket, int clientCount) {
         this.socket = socket;
         this.clientCount = clientCount;
+        service = new Service(this);
     }
 
     @Override
@@ -35,17 +38,9 @@ public class ServerThread implements Runnable {
                 try {
                     byte[] data = new byte[dataInputStream.readInt()];
                     dataInputStream.readFully(data);
-                    String message = ByteUtil.getStringUTF16(data);
-
-                    System.out.println("Server received " + ": " + message);
-
-                    String result = "OK client " + clientCount;
-                    byte[] dataResult = ByteUtil.getByteUTF16(result);
-                    dataOutputStream.writeInt(dataResult.length);
-                    dataOutputStream.write(dataResult);
-                    dataOutputStream.flush();
+                    service.xyLy(data);
                 } catch (IOException e) {
-                    System.err.println(clientCount +  " Lost connection");
+                    System.err.println(clientCount + " Lost connection");
                     closeServerThread();
                 }
             }
@@ -70,5 +65,17 @@ public class ServerThread implements Runnable {
     public void startServerThread() {
         worker = new Thread(this);
         worker.start();
+    }
+
+    @Override
+    public void send(byte[] data) {
+        try {
+            dataOutputStream.writeInt(data.length);
+            dataOutputStream.write(data);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            System.err.println(clientCount + " Lost connection");
+            closeServerThread();
+        }
     }
 }

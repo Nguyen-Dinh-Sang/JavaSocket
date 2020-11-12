@@ -1,6 +1,8 @@
 package musicinformationclient.socket;
 
-import musicinformationclient.ByteUtil;
+import musicinformationclient.ase.ASE;
+import musicinformationclient.rsa.RSA;
+import musicinformationclient.util.ByteUtil;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,6 +12,8 @@ public class SocketClient {
     private Result result;
     private DataOutputStream dataOutputStream;
     private DataInputStream dataInputStream;
+    private RSA rsa;
+    private ASE ase;
 
     public SocketClient(String address, int port, Result result) {
         this.result = result;
@@ -24,8 +28,11 @@ public class SocketClient {
                 System.err.println("Connected to server");
             }
 
+            rsa = new RSA();
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            sendKeyRSA();
+            listening();
         } catch (IOException ex) {
             System.err.println("Lost connection");
             System.out.println("Reconnection");
@@ -49,11 +56,13 @@ public class SocketClient {
     public void send(String message) {
         try {
             System.out.println("Send: " + message);
-            byte[] data = ByteUtil.getByteUTF16(message);
-            dataOutputStream.writeInt(data.length);
-            dataOutputStream.write(data);
-            dataOutputStream.flush();
-            listening();
+            byte[] data = ase.maHoa(message);
+            if (data != null) {
+                dataOutputStream.writeInt(data.length);
+                dataOutputStream.write(data);
+                dataOutputStream.flush();
+                listening();
+            }
         } catch (IOException ex) {
             closeSocket();
         }
@@ -63,8 +72,7 @@ public class SocketClient {
         try {
             byte[] data = new byte[dataInputStream.readInt()];
             dataInputStream.readFully(data);
-            String message = ByteUtil.getStringUTF16(data);
-            result.result(message);
+            xuLy(data);
         } catch (IOException e) {
             closeSocket();
         }
@@ -75,5 +83,28 @@ public class SocketClient {
         void result(String mes);
 
         void closed();
+    }
+
+    public void sendKeyRSA() {
+        try {
+            dataOutputStream.writeInt(rsa.getPubKey().length);
+            dataOutputStream.write(rsa.getPubKey());
+            dataOutputStream.flush();
+        } catch (IOException ex) {
+            closeSocket();
+        }
+    }
+
+    public void xuLy(byte[] data) {
+        String message = "";
+        if (ase != null) {
+            message = ase.giaMa(data);
+        }
+
+        if (message.startsWith("RESULT###")) {
+            result.result(message);
+        } else {
+            ase = new ASE(rsa.giaMa(data));
+        }
     }
 }

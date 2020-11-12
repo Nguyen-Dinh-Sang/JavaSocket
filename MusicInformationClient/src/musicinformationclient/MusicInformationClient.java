@@ -33,6 +33,7 @@ public class MusicInformationClient {
 
         Scanner scanner = new Scanner(System.in);
         String line = "";
+        // gửi over lên để tắt server
         while (!line.equals("Over")) {
             line = scanner.nextLine();
             client.send(line);

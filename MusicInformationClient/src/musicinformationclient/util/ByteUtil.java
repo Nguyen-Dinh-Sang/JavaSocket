@@ -1,4 +1,4 @@
-package musicinformationclient;
+package musicinformationclient.util;
 
 import java.nio.charset.StandardCharsets;
 
