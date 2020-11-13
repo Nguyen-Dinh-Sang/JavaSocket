@@ -3,7 +3,6 @@ package musicinformationclient.rsa;
 import javax.crypto.Cipher;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 
 public class RSA {
     private byte[] pubKey;

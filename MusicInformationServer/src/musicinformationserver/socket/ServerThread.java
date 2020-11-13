@@ -1,10 +1,12 @@
 package musicinformationserver.socket;
 
-import java.io.*;
+import musicinformationserver.service.Service;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
-import musicinformationserver.service.Service;
-import musicinformationserver.util.ByteUtil;
 
 public class ServerThread implements Runnable, Service.TuongTac {
 

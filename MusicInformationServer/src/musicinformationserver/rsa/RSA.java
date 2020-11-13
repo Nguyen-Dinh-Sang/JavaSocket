@@ -5,10 +5,10 @@
  */
 package musicinformationserver.rsa;
 
+import javax.crypto.Cipher;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
-import javax.crypto.Cipher;
 
 /**
  *

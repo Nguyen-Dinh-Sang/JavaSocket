@@ -2,9 +2,10 @@ package musicinformationclient.socket;
 
 import musicinformationclient.ase.ASE;
 import musicinformationclient.rsa.RSA;
-import musicinformationclient.util.ByteUtil;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class SocketClient {

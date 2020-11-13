@@ -1,10 +1,7 @@
 package musicinformationserver.service;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import musicinformationserver.ase.ASE;
 import musicinformationserver.rsa.RSA;
-import musicinformationserver.util.ByteUtil;
 
 public class Service {
 
