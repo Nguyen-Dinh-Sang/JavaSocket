@@ -1,6 +1,6 @@
 package musicinformationclient.socket;
 
-import musicinformationclient.ase.ASE;
+import musicinformationclient.aes.AES;
 import musicinformationclient.rsa.RSA;
 
 import java.io.DataInputStream;
@@ -14,7 +14,7 @@ public class SocketClient {
     private DataOutputStream dataOutputStream;
     private DataInputStream dataInputStream;
     private RSA rsa;
-    private ASE ase;
+    private AES AES;
 
     public SocketClient(String address, int port, Result result) {
         this.result = result;
@@ -57,7 +57,7 @@ public class SocketClient {
     public void send(String message) {
         try {
             System.out.println("Send: " + message);
-            byte[] data = ase.maHoa(message);
+            byte[] data = AES.maHoa(message);
             if (data != null) {
                 dataOutputStream.writeInt(data.length);
                 dataOutputStream.write(data);
@@ -98,14 +98,14 @@ public class SocketClient {
 
     public void xuLy(byte[] data) {
         String message = "";
-        if (ase != null) {
-            message = ase.giaMa(data);
-        }
-
-        if (message.startsWith("RESULT###")) {
-            result.result(message);
+        if (AES != null) {
+            message = AES.giaMa(data);
+            if (message.startsWith("RESULT###")) {
+                System.err.println("RESULT###");
+                result.result(message);
+            }
         } else {
-            ase = new ASE(rsa.giaMa(data));
+            AES = new AES(rsa.giaMa(data));
         }
     }
 }

@@ -80,4 +80,9 @@ public class ServerThread implements Runnable, Service.TuongTac {
             closeServerThread();
         }
     }
+
+    @Override
+    public void closeThread() {
+        this.closeServerThread();
+    }
 }

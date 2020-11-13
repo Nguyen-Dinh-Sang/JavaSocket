@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package musicinformationclient.ase;
+package musicinformationclient.aes;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
@@ -14,10 +14,11 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author DinhSang
  */
-public class ASE {
+public class AES {
     SecretKey secKey;
 
-    public ASE(byte[] secKey) {
+    public AES(byte[] secKey) {
+        System.out.println("Create AES");
         this.secKey= new SecretKeySpec(secKey, 0, secKey.length, "AES");
     }
 
@@ -27,6 +28,7 @@ public class ASE {
             aesCipher = Cipher.getInstance("AES");
             aesCipher.init(Cipher.ENCRYPT_MODE, secKey);
             byte[] byteCipherText = aesCipher.doFinal(test.getBytes());
+            System.err.println("Encrypt AES Success");
             return byteCipherText;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -49,6 +51,7 @@ public class ASE {
             aesCipher.init(Cipher.DECRYPT_MODE, secKey);
             byte[] bytePlainText = aesCipher.doFinal(data);
             String plainText = new String(bytePlainText);
+            System.err.println("Decrypt AES Success: " + new String(bytePlainText));
             return plainText;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

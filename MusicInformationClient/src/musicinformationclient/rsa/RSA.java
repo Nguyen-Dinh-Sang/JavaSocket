@@ -9,6 +9,7 @@ public class RSA {
     private byte[] priKey;
 
     public RSA() {
+        System.out.println("Create RSA");
         createKey();
     }
 
@@ -25,7 +26,7 @@ public class RSA {
 
             pubKey = publicKey.getEncoded();
             priKey = privateKey.getEncoded();
-            System.err.println("Generate key successfully");
+            System.err.println("Create RSA Key Success");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,14 +37,15 @@ public class RSA {
             PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(priKey);
             KeyFactory factory = KeyFactory.getInstance("RSA");
             PrivateKey priKey = factory.generatePrivate(spec);
-
             Cipher c = Cipher.getInstance("RSA");
+
             c.init(Cipher.DECRYPT_MODE, priKey);
             byte decryptOut[] = c.doFinal(data);
+            System.err.println("Decrypt RSA Success: " + new String(decryptOut));
             return decryptOut;
         } catch (Exception e) {
-            return null;
         }
+        return null;
     }
 
     public byte[] getPubKey() {

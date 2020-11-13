@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package musicinformationserver.ase;
+package musicinformationserver.aes;
 
 import javax.crypto.*;
 import java.security.InvalidKeyException;
@@ -13,20 +13,21 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author DinhSang
  */
-public class ASE {
+public class AES {
 
     SecretKey secKey = null;
 
-    public ASE() {
+    public AES() {
+        System.out.println("Create AES");
         createKey();
     }
 
     public void createKey() {
         try {
-            KeyGenerator generator = null;
-            generator = KeyGenerator.getInstance("AES");
-            generator.init(128); // The AES key size in number of bits
+            KeyGenerator generator = KeyGenerator.getInstance("AES");
+            generator.init(128);
             secKey = generator.generateKey();
+            System.err.println("Create Secret Key Success");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -34,10 +35,10 @@ public class ASE {
 
     public byte[] maHoa(String test) {
         try {
-            Cipher aesCipher = null;
-            aesCipher = Cipher.getInstance("AES");
+            Cipher aesCipher = Cipher.getInstance("AES");
             aesCipher.init(Cipher.ENCRYPT_MODE, secKey);
             byte[] byteCipherText = aesCipher.doFinal(test.getBytes());
+            System.err.println("Encrypt AES Success");
             return byteCipherText;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -60,7 +61,7 @@ public class ASE {
             aesCipher.init(Cipher.DECRYPT_MODE, secKey);
             byte[] bytePlainText = aesCipher.doFinal(data);
             String plainText = new String(bytePlainText);
-            System.out.println("KetQua: " + plainText);
+            System.err.println("Decrypt AES Success: " + new String(bytePlainText));
             return plainText;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -74,13 +75,10 @@ public class ASE {
             e.printStackTrace();
         }
 
-        return "";
+        return null;
     }
 
     public byte[] getSecretKey() {
-        for (byte item : secKey.getEncoded()) {
-            System.err.println("# "+ item);
-        }
         return secKey.getEncoded();
     }
 }

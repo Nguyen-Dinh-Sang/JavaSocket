@@ -11,30 +11,29 @@ import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
- *
  * @author DinhSang
  */
 public class RSA {
+
     private byte[] pubKey;
-    
+
     public RSA(byte[] pubKey) {
+        System.out.println("Create RSA");
         this.pubKey = pubKey;
     }
-    
+
     public byte[] maHoa(byte[] data) {
         try {
             X509EncodedKeySpec spec = new X509EncodedKeySpec(pubKey);
             KeyFactory factory = KeyFactory.getInstance("RSA");
             PublicKey pubKey = factory.generatePublic(spec);
-
             Cipher c = Cipher.getInstance("RSA");
             c.init(Cipher.ENCRYPT_MODE, pubKey);
-
             byte encryptOut[] = c.doFinal(data);
-
+            System.err.println("Encrypt RSA Success");
             return encryptOut;
         } catch (Exception e) {
-            return maHoa(data);
         }
+        return null;
     }
 }
