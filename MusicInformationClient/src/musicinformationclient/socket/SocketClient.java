@@ -101,7 +101,7 @@ public class SocketClient {
         if (AES != null) {
             message = AES.giaMa(data);
             if (message.startsWith("RESULT###")) {
-                System.err.println("RESULT###");
+                System.err.println("RESULT");
                 result.result(message);
             }
         } else {

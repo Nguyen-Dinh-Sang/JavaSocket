@@ -2,6 +2,7 @@ package musicinformationserver.service;
 
 import musicinformationserver.aes.AES;
 import musicinformationserver.json.URLConnect;
+import musicinformationserver.json.URLConnect.TYPE;
 import musicinformationserver.rsa.RSA;
 
 public class Service {
@@ -28,35 +29,46 @@ public class Service {
                 }
             }
 
+            URLConnect urlConnect = new URLConnect();
+            String tmp[] = message.split("###");
+            String ketQua = "RESULT###";
+
             switch (i) {
                 case 0: {
                     System.err.println("OVER");
+
                     tuongTac.closeThread();
                     break;
                 }
                 case 1: {
                     System.err.println("SINGS");
-                    URLConnect urlConnect = new URLConnect();
-                    String tmp[] = message.split("###");
-                    
-                    String ketQua = urlConnect.getSings(tmp[1]);
-                    String ok = "RESULT###" + "ok" + ketQua;
-                    tuongTac.send(AES.maHoa(ok));
+
+                    ketQua += urlConnect.getData(tmp[1], TYPE.SINGS);
+                    tuongTac.send(AES.maHoa(ketQua));
                     break;
                 }
 
                 case 2: {
                     System.err.println("SINGINFO");
+
+                    ketQua += urlConnect.getData(tmp[1], TYPE.SINGINFO);
+                    tuongTac.send(AES.maHoa(ketQua));
                     break;
                 }
 
                 case 3: {
                     System.err.println("SONGS");
+
+                    ketQua += urlConnect.getData(tmp[1], TYPE.SONGS);
+                    tuongTac.send(AES.maHoa(ketQua));
                     break;
                 }
 
                 case 4: {
                     System.err.println("SONGINFO");
+
+                    ketQua += urlConnect.getData(tmp[1], TYPE.SONGINFO);
+                    tuongTac.send(AES.maHoa(ketQua));
                     break;
                 }
 

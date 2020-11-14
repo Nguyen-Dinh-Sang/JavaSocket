@@ -1,20 +1,53 @@
 package musicinformationserver.json;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 import java.util.Scanner;
 
 public class URLConnect {
-    public URLConnect() {
 
+    public enum TYPE {SONGS, SONGINFO, SINGS, SINGINFO}
+
+    public URLConnect() {
+        System.out.println("Create URL Connect");
     }
 
-    public String getSings(String sing) {
+    public String getData(String search, TYPE type) {
+        URL url;
         try {
-            URL url = new URL("http://nhom62-api-server.herokuapp.com/info/sing?name=" + URLEncoder.encode(sing, "UTF-8"));
+            switch (type) {
+                case SINGS -> {
+                    url = new URL("https://nhom62-api-server.herokuapp.com/search/sing?name=" + URLEncoder.encode(search, "UTF-8"));
+                    return getDataFomURL(url);
+                }
+
+                case SONGS -> {
+                    url = new URL("https://nhom62-api-server.herokuapp.com/search/song?name=" + URLEncoder.encode(search, "UTF-8"));
+                    return getDataFomURL(url);
+                }
+
+                case SINGINFO -> {
+                    url = new URL("http://nhom62-api-server.herokuapp.com/info/sing?name=" + URLEncoder.encode(search, "UTF-8"));
+                    return getDataFomURL(url);
+                }
+
+                case SONGINFO -> {
+                    url = new URL("http://nhom62-api-server.herokuapp.com/info/song?name=" + URLEncoder.encode(search, "UTF-8"));
+                    return getDataFomURL(url);
+                }
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return getData(search, type);
+    }
+
+    private String getDataFomURL(URL url) {
+        try {
             System.err.println("link: " + url.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -36,6 +69,6 @@ public class URLConnect {
             e.printStackTrace();
         }
 
-        return getSings(sing);
+        return getDataFomURL(url);
     }
 }
