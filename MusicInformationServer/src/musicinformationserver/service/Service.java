@@ -1,6 +1,7 @@
 package musicinformationserver.service;
 
 import musicinformationserver.aes.AES;
+import musicinformationserver.json.URLConnect;
 import musicinformationserver.rsa.RSA;
 
 public class Service {
@@ -35,7 +36,11 @@ public class Service {
                 }
                 case 1: {
                     System.err.println("SINGS");
-                    String ok = "RESULT###" + "ok" + message;
+                    URLConnect urlConnect = new URLConnect();
+                    String tmp[] = message.split("###");
+                    
+                    String ketQua = urlConnect.getSings(tmp[1]);
+                    String ok = "RESULT###" + "ok" + ketQua;
                     tuongTac.send(AES.maHoa(ok));
                     break;
                 }
