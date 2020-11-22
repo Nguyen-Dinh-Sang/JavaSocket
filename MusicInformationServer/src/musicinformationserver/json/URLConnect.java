@@ -17,23 +17,23 @@ public class URLConnect {
         URL url;
         try {
             switch (type) {
-                case SINGS -> {
+                case SINGS : {
                     url = new URL("https://nhom62-api-server.herokuapp.com/search/sing?name=" + URLEncoder.encode(search, "UTF-8"));
                     return getDataFomURL(url);
                 }
 
-                case SONGS -> {
+                case SONGS : {
                     url = new URL("https://nhom62-api-server.herokuapp.com/search/song?name=" + URLEncoder.encode(search, "UTF-8"));
                     return getDataFomURL(url);
                 }
 
-                case SINGINFO -> {
-                    url = new URL("http://nhom62-api-server.herokuapp.com/info/sing?name=" + URLEncoder.encode(search, "UTF-8"));
+                case SINGINFO : {
+                    url = new URL("http://nhom62-api-server.herokuapp.com/info/sing?name=" + search);
                     return getDataFomURL(url);
                 }
 
-                case SONGINFO -> {
-                    url = new URL("http://nhom62-api-server.herokuapp.com/info/song?name=" + URLEncoder.encode(search, "UTF-8"));
+                case SONGINFO : {
+                    url = new URL("http://nhom62-api-server.herokuapp.com/info/song?name=" + search);
                     return getDataFomURL(url);
                 }
             }
@@ -60,6 +60,7 @@ public class URLConnect {
                     inline += sc.nextLine();
                 }
                 sc.close();
+                System.out.println(inline);
                 return inline;
             }
 

@@ -100,7 +100,7 @@ public class SocketClient {
         String message = "";
         if (AES != null) {
             message = AES.giaMa(data);
-            if (message.startsWith("RESULT###")) {
+            if (message.startsWith("RESULTSEARCHCASI###")||message.startsWith("RESULTSEARCHBAIHAT###")||message.startsWith("RESULTINFOCASI###")||message.startsWith("RESULTINFOBAIHAT###")) {
                 System.err.println("RESULT");
                 result.result(message);
             }

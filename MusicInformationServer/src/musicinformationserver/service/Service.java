@@ -31,8 +31,10 @@ public class Service {
 
             URLConnect urlConnect = new URLConnect();
             String tmp[] = message.split("###");
-            String ketQua = "RESULT###";
-
+            String ketQuaSearchCaSi = "RESULTSEARCHCASI###";
+            String ketQuaSearchBaiHat = "RESULTSEARCHBAIHAT###";
+            String ketQuaInfoCaSi= "RESULTINFOCASI###";
+            String ketQuaInfoBaiHat= "RESULTINFOBAIHAT###";
             switch (i) {
                 case 0: {
                     System.err.println("OVER");
@@ -43,32 +45,32 @@ public class Service {
                 case 1: {
                     System.err.println("SINGS");
 
-                    ketQua += urlConnect.getData(tmp[1], TYPE.SINGS);
-                    tuongTac.send(AES.maHoa(ketQua));
+                    ketQuaSearchCaSi += urlConnect.getData(tmp[1], TYPE.SINGS);
+                    tuongTac.send(AES.maHoa(ketQuaSearchCaSi));
                     break;
                 }
 
                 case 2: {
                     System.err.println("SINGINFO");
 
-                    ketQua += urlConnect.getData(tmp[1], TYPE.SINGINFO);
-                    tuongTac.send(AES.maHoa(ketQua));
+                    ketQuaInfoCaSi += urlConnect.getData(tmp[1], TYPE.SINGINFO);
+                    tuongTac.send(AES.maHoa(ketQuaInfoCaSi));
                     break;
                 }
 
                 case 3: {
                     System.err.println("SONGS");
 
-                    ketQua += urlConnect.getData(tmp[1], TYPE.SONGS);
-                    tuongTac.send(AES.maHoa(ketQua));
+                    ketQuaSearchBaiHat += urlConnect.getData(tmp[1], TYPE.SONGS);
+                    tuongTac.send(AES.maHoa(ketQuaSearchBaiHat));
                     break;
                 }
 
                 case 4: {
                     System.err.println("SONGINFO");
 
-                    ketQua += urlConnect.getData(tmp[1], TYPE.SONGINFO);
-                    tuongTac.send(AES.maHoa(ketQua));
+                    ketQuaInfoBaiHat += urlConnect.getData(tmp[1], TYPE.SONGINFO);
+                    tuongTac.send(AES.maHoa(ketQuaInfoBaiHat));
                     break;
                 }
 
