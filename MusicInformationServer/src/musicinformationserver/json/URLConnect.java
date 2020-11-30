@@ -28,12 +28,12 @@ public class URLConnect {
                 }
 
                 case SINGINFO : {
-                    url = new URL("http://nhom62-api-server.herokuapp.com/info/sing?name=" + search);
+                    url = new URL(search);
                     return getDataFomURL(url);
                 }
 
                 case SONGINFO : {
-                    url = new URL("http://nhom62-api-server.herokuapp.com/info/song?name=" + search);
+                    url = new URL(search);
                     return getDataFomURL(url);
                 }
             }
