@@ -6,8 +6,7 @@
 package musicinformationclient;
 
 import java.awt.*;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import com.sun.swing.internal.plaf.basic.resources.basic_it;
 import javafx.application.Platform;
@@ -22,14 +21,14 @@ import org.json.JSONArray;
  */
 public class AlbumSingsPanel extends javax.swing.JPanel {
 
-
+private SongsPanelinAlbum.SendLink sendLink;
     /**
      * Creates new form AlbumSingsPanel
      */
     public AlbumSingsPanel() {
         initComponents();
     }
-    public AlbumSingsPanel(String name, String info,Event event)  {
+    public AlbumSingsPanel(String name, String info)  {
 
         System.out.println("đi tới chỗ này 4" + info);
         System.out.println("đi tới chỗ này 4" + name);
@@ -38,12 +37,18 @@ public class AlbumSingsPanel extends javax.swing.JPanel {
         loadThongTinCaSi(name, info);
         
     }
-    public AlbumSingsPanel(JSONArray array) {
-        System.out.println("đi tới chỗ này 5");
+    public AlbumSingsPanel(JSONArray array,String ok,SongsPanelinAlbum.SendLink sendLink)  {
+        this.sendLink=sendLink;
         initComponents();
-        loadAlbum(array);
+        loadSongs(array,ok);
     }
-    public AlbumSingsPanel(String tenAlbum ,JSONArray array , String add) {
+    public AlbumSingsPanel(JSONArray array,int ok,SongsPanelinAlbum.SendLink sendLink)  {
+        this.sendLink=sendLink;
+        initComponents();
+        loadMvs(array,ok);
+    }
+    public AlbumSingsPanel(String tenAlbum ,JSONArray array , String add,SongsPanelinAlbum.SendLink sendLink) {
+        this.sendLink=sendLink;
         System.out.println("đi tới chỗ này 6");
         initComponents();
         add6Album(tenAlbum,array,add);
@@ -82,7 +87,7 @@ public class AlbumSingsPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelDanhSachAlBum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelDanhSachAlBum, javax.swing.GroupLayout.PREFERRED_SIZE,1200, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelTenAlbum)
@@ -93,7 +98,7 @@ public class AlbumSingsPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabelTenAlbum)
                 .addGap(5, 5, 5)
-                .addComponent(jPanelDanhSachAlBum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanelDanhSachAlBum,  javax.swing.GroupLayout.PREFERRED_SIZE,800, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -106,8 +111,9 @@ private void loadThongTinCaSi(String name, String info) {
         //jPanelDanhSachAlBum.removeAll();
         String [] tmp = info.split(",");
         JPanel jPanel_tmp_thongtin = new JPanel();
+        //jPanel_tmp_thongtin.setSize(200,100);
+        //jPanel_tmp_thongtin.setLayout(new GridLayout(tmp.length+2, 1));
 
-        jPanel_tmp_thongtin.setLayout(new GridLayout(tmp.length+2, 1));
         JLabel  jlabname = new JLabel("Tên ca sĩ:"+name);
         jlabname.setFont(new java.awt.Font("Tahoma", 0, 14));
         jPanel_tmp_thongtin.add(jlabname);
@@ -118,12 +124,14 @@ private void loadThongTinCaSi(String name, String info) {
             jlabtt[i]=new JLabel(tmp[i]);
             jlabtt[i].setFont(new java.awt.Font("Tahoma", 0, 14));
             jPanel_tmp_thongtin.add(jlabtt[i]);
+            jPanel_tmp_thongtin.add(new JLabel("<html> <br></html>"));
         }
         jLabelTenAlbum.setText("Thông tin ca sĩ:");
-
+    JScrollPane jScrollPane=new JScrollPane(jPanel_tmp_thongtin);
+    jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
     jPanelDanhSachAlBum.removeAll();
     jPanelDanhSachAlBum.setLayout(new GridLayout(1,1));
-    jPanelDanhSachAlBum.add(jPanel_tmp_thongtin);
+    jPanelDanhSachAlBum.add(jScrollPane);
 
     jPanelDanhSachAlBum.validate();
     jPanelDanhSachAlBum.repaint();
@@ -131,67 +139,95 @@ private void loadThongTinCaSi(String name, String info) {
     private  void add6Album(String tenAlbum,JSONArray arr, String add)
     {
 
-        int length=6;
-        if(arr.length()<6)
+        int length=arr.length();
+        /*if(arr.length()<6)
         {
             length=arr.length();
-        }
+        }*/
         JPanel jPanel_tmp_add_Al=new JPanel();
         jPanel_tmp_add_Al.setSize(400,600);
-        jPanel_tmp_add_Al.setLayout(new GridLayout(length,1));
-
+        //jPanel_tmp_add_Al.setLayout(new GridLayout(length,1));
+        jPanel_tmp_add_Al.setLayout(new GridLayout(length*2,1));
+        JPanel jPanel = new JPanel();
+        //jPanel.setLayout(new GridLayout(length,1));
+        jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
         for(int i=0;i<length;i++)
-        { String link = arr.getJSONObject(i).getString("audio");
-            JPanel jPanel = new JPanel();
-//            jPanel.add(new BaiHatCuaAlBumPanel(arr.getJSONObject(i).getString("audio")));
-             System.out.println("out"+arr.getJSONObject(i).getString("audio"));
-            JFXPanel jfxPanel = new JFXPanel();
+        {
 
-            Platform.runLater(() -> {
-                javafx.scene.web.WebView webView = new javafx.scene.web.WebView();
-                jfxPanel.setScene(new Scene(webView));
-                webView.getEngine().load(link);
-            });
-            //jPanel.setSize(200,50);
-            //jPanel.add(jfxPanel);
-            jfxPanel.setSize(200,50);
-            jPanel_tmp_add_Al.add(jfxPanel);
+
+            /*jPanel_tmp_add_Al.add(new JLabel(arr.getJSONObject(i).getString("name")));
+
+            jPanel_tmp_add_Al.add(new JLabel(arr.getJSONObject(i).getString("audio")));*/
+            String tenbaihat = arr.getJSONObject(i).getString("name");
+
+            //String tencasi = arr.getJSONObject(i).getString("artists_names");
+            String anhcasi = arr.getJSONObject(i).getString("thumbnail");
+            String infocasi = arr.getJSONObject(i).getString("audio");;
+            JPanel tmp=new SongsPanelinAlbum(tenbaihat,anhcasi,infocasi,"",sendLink );
+            tmp.setBackground(Color.white);
+            jPanel.add(tmp);
+            jPanel.setBackground(Color.white);
+            ///jPanel.add(new JLabel("<html><br></html>"));
+
         }
+        JScrollPane jScrollPane = new JScrollPane(jPanel);
+        jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
         jLabelTenAlbum.setText(tenAlbum);
         jPanelDanhSachAlBum.removeAll();
-        jPanelDanhSachAlBum.setLayout(new GridLayout(1,1));
-        jPanelDanhSachAlBum.add(jPanel_tmp_add_Al);
+        jPanelDanhSachAlBum.setLayout(new GridLayout());
+        jPanelDanhSachAlBum.add(jScrollPane);
 
         jPanelDanhSachAlBum.validate();
         jPanelDanhSachAlBum.repaint();
 
     }
-private void loadAlbum (JSONArray arr)
-{
-    JPanel jPanel_tmp_loadALbum =new JPanel();
-
-    int length=6;
-    if(arr.length()<6)
+    private void loadSongs(JSONArray arr,String song)
     {
-        length=arr.length();
+        JPanel jPanelSongs= new JPanel();
+        jPanelSongs.setLayout(new GridLayout(arr.length(),1));
+        for (int i=0;i<arr.length();i++)
+        {String tenbaihat = arr.getJSONObject(i).getString("name");
+
+            //String tencasi = arr.getJSONObject(i).getString("artists_names");
+            String anhcasi = arr.getJSONObject(i).getString("thumbnail");
+            String infocasi = arr.getJSONObject(i).getString("audio");;
+            JPanel tmp=new SongsPanelinAlbum(tenbaihat,anhcasi,infocasi,"", sendLink);
+            tmp.setBackground(Color.white);
+            jPanelSongs.add(tmp);
+        }
+        JScrollPane jScrollPane = new JScrollPane(jPanelSongs);
+        jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        jPanelDanhSachAlBum.removeAll();
+        jPanelDanhSachAlBum.setLayout(new GridLayout(1,1));
+        jPanelDanhSachAlBum.add(jScrollPane);
+        jLabelTenAlbum.setText("");
+        jPanelDanhSachAlBum.validate();
+        jPanelDanhSachAlBum.repaint();
     }
-    jPanel_tmp_loadALbum.setLayout(new GridLayout(length,1));
-    for(int i=0;i<length;i++)
+    private void loadMvs(JSONArray arr,int ok)
     {
+        JPanel jPanelSongs= new JPanel();
+        jPanelSongs.setLayout(new GridLayout(arr.length(),1));
+        for (int i=0;i<arr.length();i++)
+        {String tenbaihat = arr.getJSONObject(i).getString("name");
 
-        JPanel jPanel=new AlbumSingsPanel(arr.getJSONObject(i).getString("name"),arr.getJSONObject(i).getJSONArray("songs"),"ok");
-        jPanel_tmp_loadALbum.add(jPanel);
+            //String tencasi = arr.getJSONObject(i).getString("artists_names");
+            String anhcasi = arr.getJSONObject(i).getString("thumbnail");
+            String infocasi = arr.getJSONObject(i).getString("video");;
+            JPanel tmp=new SongsPanelinAlbum(tenbaihat,anhcasi,infocasi,"", sendLink);
+            tmp.setBackground(Color.white);
+            jPanelSongs.add(tmp);
+        }
+        JScrollPane jScrollPane = new JScrollPane(jPanelSongs);
+        jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        jPanelDanhSachAlBum.removeAll();
+        jPanelDanhSachAlBum.setLayout(new GridLayout(1,1));
+        jPanelDanhSachAlBum.add(jScrollPane);
+        jLabelTenAlbum.setText("");
+        jPanelDanhSachAlBum.validate();
+        jPanelDanhSachAlBum.repaint();
     }
-    jLabelTenAlbum.setText("Album: ");
-    jPanelDanhSachAlBum.removeAll();
-    jPanelDanhSachAlBum.setLayout(new GridLayout(1,1));
-    jPanelDanhSachAlBum.add(jPanel_tmp_loadALbum);
 
-    jPanelDanhSachAlBum.validate();
-    jPanelDanhSachAlBum.repaint();
-
-        
-}
     private void loadData() {
 
     }

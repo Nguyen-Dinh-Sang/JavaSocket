@@ -14,10 +14,16 @@ import org.json.JSONObject;
  *
  * @author Administrator
  */
-public class listResultPanel extends javax.swing.JPanel {
+public class listResultPanel extends javax.swing.JPanel implements SongsPanelinAlbum.SendLink {
         JLabel loading;
         private eventClick eClick;
-        public interface eventClick
+
+    @Override
+    public void send(String name, String link) {
+        load1BaiHat(name,link);
+    }
+
+    public interface eventClick
         {
             void sendClick();
         }
@@ -25,7 +31,6 @@ public class listResultPanel extends javax.swing.JPanel {
      * Creates new form listResultPanel
      */
         private singerPanel.Event event;
-        
     public listResultPanel(singerPanel.Event event,eventClick e) {
         this.event = event;
         this.eClick=e;
@@ -158,6 +163,17 @@ public class listResultPanel extends javax.swing.JPanel {
      }
         
     }
+    private void load1BaiHat(String name,String link)
+    {
+        JPanel jPanel=new Jpanel1BaiHat(name,link);
+        jlabTenDanhSach.setVisible(false);
+        jButton1.setVisible(false);
+        jPanelListCaSi.removeAll();
+        jPanelListCaSi.setLayout(new GridLayout());
+        jPanelListCaSi.add(jPanel);
+        jPanelListCaSi.validate();
+        jPanelListCaSi.repaint();
+    }
     private void loadData( String inputString) {
         
         jPanelListCaSi.removeAll();
@@ -221,17 +237,20 @@ public class listResultPanel extends javax.swing.JPanel {
         String name= obj.getJSONObject("data").getString("name");
         String info= obj.getJSONObject("data").getString("info");
         JSONArray album =obj.getJSONObject("data").getJSONArray("album");
+        JSONArray songs=obj.getJSONObject("data").getJSONArray("song");
+        JSONArray mvs=obj.getJSONObject("data").getJSONArray("mv");
         System.out.println("đi tới chỗ này 2");
 
 //        JPanel jPanel = new ListInfoSingPanel(inputData);
         jPanelListCaSi.setLayout(new GridLayout(4,1));
-         //JPanel jPanel = new AlbumSingsPanel(name,info,evt);
-        //jPanelListCaSi.add(jPanel);
-        JPanel jPanelAlbum = new AlbumSingsPanel(album);
-
+         JPanel jPanel = new AlbumSingsPanel(name,info);
+        jPanelListCaSi.add(jPanel);
+        JPanel jPanelAlbum = new KhungChuaAlbum(album,this);
+        JPanel jPanelSongs= new KhungChuaAlbum(songs,"ok",this);
+        JPanel jPanelMvs= new KhungChuaAlbum(mvs,1,this);
         jPanelListCaSi.add(jPanelAlbum);
-        //jPanelListCaSi.add(jPanel);
-        //jPanelListCaSi.add(jPanel);
+        jPanelListCaSi.add(jPanelSongs);
+       jPanelListCaSi.add(jPanelMvs);
         jlabTenDanhSach.setText("Thông tin Ca sĩ:");
         //jPanelListCaSi.setLayout(new GridLayout());
 

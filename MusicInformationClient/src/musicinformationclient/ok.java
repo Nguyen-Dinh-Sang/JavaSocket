@@ -765,7 +765,7 @@ public class ok implements SocketClient.Result {
         Platform.runLater(() -> {
             WebView webView = new WebView();
             jfxPanel.setScene(new Scene(webView));
-            webView.getEngine().load("https://zingmp3.vn/embed/song/" + TT_Audio);
+            webView.getEngine().load(TT_Audio);
         });
         JPanel pnt= new JPanel();
         javax.swing.GroupLayout jpanelTT_Val_AudioLayout = new javax.swing.GroupLayout(jpanelTT_Val_Audio);
