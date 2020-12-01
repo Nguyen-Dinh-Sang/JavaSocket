@@ -18,12 +18,13 @@ public class URLConnect {
         try {
             switch (type) {
                 case SINGS : {
-                    url = new URL("https://nhom62-api-server.herokuapp.com/search/sing?name=" + URLEncoder.encode(search, "UTF-8"));
+                    //"https://nhom62-api-server.herokuapp.com
+                    url = new URL("http://localhost:1999/search/sing?name=" + URLEncoder.encode(search, "UTF-8"));
                     return getDataFomURL(url);
                 }
 
                 case SONGS : {
-                    url = new URL("https://nhom62-api-server.herokuapp.com/search/song?name=" + URLEncoder.encode(search, "UTF-8"));
+                    url = new URL("http://localhost:1999/search/song?name=" + URLEncoder.encode(search, "UTF-8"));
                     return getDataFomURL(url);
                 }
 

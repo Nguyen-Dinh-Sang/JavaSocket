@@ -31,9 +31,11 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
      * Creates new form listResultPanel
      */
         private singerPanel.Event event;
-    public listResultPanel(singerPanel.Event event,eventClick e) {
+        private Jpanel1BaiHat.SendBack sendBack;
+    public listResultPanel(singerPanel.Event event,eventClick e,Jpanel1BaiHat.SendBack sendBack) {
         this.event = event;
         this.eClick=e;
+        this.sendBack=sendBack;
         initComponents();
         initUI();
     }
@@ -114,8 +116,8 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
                 .addGroup(listresultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanelTenDanhSach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addGap(4, 4, 4)
-                .addComponent(jlabTenDanhSach, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jlabTenDanhSach, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelListCaSi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -128,7 +130,7 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(listresultPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(listresultPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -165,7 +167,7 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
     }
     private void load1BaiHat(String name,String link)
     {
-        JPanel jPanel=new Jpanel1BaiHat(name,link);
+        JPanel jPanel=new Jpanel1BaiHat(name,link,sendBack);
         jlabTenDanhSach.setVisible(false);
         jButton1.setVisible(false);
         jPanelListCaSi.removeAll();

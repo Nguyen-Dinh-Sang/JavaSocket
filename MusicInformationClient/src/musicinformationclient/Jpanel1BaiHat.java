@@ -8,6 +8,7 @@ package musicinformationclient;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
+import musicinformationclient.socket.WebView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,11 +18,17 @@ import java.awt.*;
  * @author Administrator
  */
 public class Jpanel1BaiHat extends javax.swing.JPanel {
+    public interface SendBack
+    {
+        void sendBackInfoCasi();
 
+    }
+    private SendBack sendBack;
     /**
      * Creates new form Jpanel1BaiHat
      */
-    public Jpanel1BaiHat(String name,String link) {
+    public Jpanel1BaiHat(String name,String link,SendBack sendBack) {
+        this.sendBack = sendBack;
         initComponents();
         loadData(name,link);
     }
@@ -42,6 +49,11 @@ public class Jpanel1BaiHat extends javax.swing.JPanel {
 
         jButtonBack.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButtonBack.setText("Back");
+        jButtonBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBackActionPerformed(evt);
+            }
+        });
 
         jLabelTenBaiHat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabelTenBaiHat.setText("Ten bai hat");
@@ -92,6 +104,11 @@ public class Jpanel1BaiHat extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
+        // TODO add your handling code here:
+sendBack.sendBackInfoCasi();
+    }//GEN-LAST:event_jButtonBackActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBack;
@@ -103,12 +120,19 @@ private void loadData(String name,String link)
 {System.out.println(link);
 
     JFXPanel jfxPanel = new JFXPanel();
+    JFXPanel jfxPanel1 = new WebView(link);
+    jPanel1.removeAll();
+    jPanelBaiHat.removeAll();
+    Platform.runLater( new Runnable ()  {
+        @Override
+                public void run()
+        {
+            javafx.scene.web.WebView webView = new javafx.scene.web.WebView();
+            jfxPanel.setScene(new Scene(webView));
+            webView.getEngine().load(link);
+            System.out.println("webview");
+        }
 
-    Platform.runLater(() -> {
-        javafx.scene.web.WebView webView = new javafx.scene.web.WebView();
-        jfxPanel.setScene(new Scene(webView));
-        webView.getEngine().load(link);
-        System.out.println("webview");
     });
 //    JPanel tmp = new JPanel();
 //    tmp.setBackground(Color.red);
@@ -117,7 +141,7 @@ private void loadData(String name,String link)
     jPanel1.removeAll();
     jPanelBaiHat.removeAll();
     jPanelBaiHat.setLayout(new GridLayout());
-    jPanelBaiHat.add(jfxPanel);
+    jPanelBaiHat.add(jfxPanel1);
     //jPanelBaiHat.setBackground(Color.red);
     jPanelBaiHat.validate();
     jPanelBaiHat.repaint();

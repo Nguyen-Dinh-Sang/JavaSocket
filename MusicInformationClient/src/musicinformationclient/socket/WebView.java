@@ -6,12 +6,13 @@ import javafx.scene.Scene;
 
 public class WebView extends JFXPanel {
     public WebView(String link){
-        JFXPanel jfxPanel = new JFXPanel();
+
 
         Platform.runLater(() -> {
             javafx.scene.web.WebView webView = new javafx.scene.web.WebView();
-            jfxPanel.setScene(new Scene(webView));
+            this.setScene(new Scene(webView));
             webView.getEngine().load(link);
+            System.out.println("goi hàm ok rồi nè");
         });
     }
 

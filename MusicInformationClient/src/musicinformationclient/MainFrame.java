@@ -21,7 +21,7 @@ import musicinformationclient.socket.SocketClient;
  *
  * @author Administrator
  */
-public class MainFrame extends javax.swing.JFrame implements SocketClient.Result, singerPanel.Event,listResultPanel.eventClick{
+public class MainFrame extends javax.swing.JFrame implements SocketClient.Result, singerPanel.Event,listResultPanel.eventClick,Jpanel1BaiHat.SendBack{
 
     /**
      * Creates new form MainFrame
@@ -267,7 +267,7 @@ public class MainFrame extends javax.swing.JFrame implements SocketClient.Result
     }
     private void loadData(String inputString) {
         
-        listResultPanel listpanel = new listResultPanel(this,this);
+        listResultPanel listpanel = new listResultPanel(this,this,this);
         listpanel.initSinger(inputString);
         resultPanel.removeAll();
         resultPanel.setLayout(new BorderLayout());
@@ -284,5 +284,9 @@ public class MainFrame extends javax.swing.JFrame implements SocketClient.Result
     public void sendClick() {
         loadData(dataSing1);
     }
-  
+
+    @Override
+    public void sendBackInfoCasi() {
+        loadData(dataSing2);
+    }
 }
