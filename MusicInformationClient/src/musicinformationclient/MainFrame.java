@@ -21,7 +21,7 @@ import musicinformationclient.socket.SocketClient;
  *
  * @author Administrator
  */
-public class MainFrame extends javax.swing.JFrame implements SocketClient.Result, singerPanel.Event,listResultPanel.eventClick,Jpanel1BaiHat.SendBack{
+public class MainFrame extends javax.swing.JFrame implements SocketClient.Result, singerPanel.Event,listResultPanel.eventClick,Jpanel1BaiHat.SendBack,SongsPanel.SendSongs{
 
     /**
      * Creates new form MainFrame
@@ -265,13 +265,27 @@ public class MainFrame extends javax.swing.JFrame implements SocketClient.Result
 
         
     }
+    public void loadInfoSongData(String inputData)
+    {
+        //JOptionPane.showMessageDialog(null, inputData, "InfoBox: " + "titleBar", JOptionPane.INFORMATION_MESSAGE);
+        resultPanel.removeAll();
+        client.send("SONGINFO###"+inputData);
+        System.out.println("data"+dataSong2);
+        loadData(dataSong2);
+
+
+    }
     private void loadData(String inputString) {
-        
-        listResultPanel listpanel = new listResultPanel(this,this,this);
+
+        listResultPanel listpanel = new listResultPanel(this,this,this,this);
         listpanel.initSinger(inputString);
+        resultPanel.setBackground(Color.white);
+        listpanel.setBackground(Color.white);
         resultPanel.removeAll();
         resultPanel.setLayout(new BorderLayout());
-        resultPanel.add(new JScrollPane(listpanel) );
+        JScrollPane jScrollPane = new JScrollPane(listpanel);
+        jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        resultPanel.add(jScrollPane);
         resultPanel.validate();
     }
 
@@ -286,7 +300,17 @@ public class MainFrame extends javax.swing.JFrame implements SocketClient.Result
     }
 
     @Override
+    public void backBaiHat() {
+        loadData(dataSong1);
+    }
+
+    @Override
     public void sendBackInfoCasi() {
         loadData(dataSing2);
+    }
+
+    @Override
+    public void sendSong(String info) {
+        loadInfoSongData(info);
     }
 }

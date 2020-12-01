@@ -26,16 +26,19 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
     public interface eventClick
         {
             void sendClick();
+            void backBaiHat();
         }
     /**
      * Creates new form listResultPanel
      */
         private singerPanel.Event event;
         private Jpanel1BaiHat.SendBack sendBack;
-    public listResultPanel(singerPanel.Event event,eventClick e,Jpanel1BaiHat.SendBack sendBack) {
+        private SongsPanel.SendSongs sendSongs;
+    public listResultPanel(singerPanel.Event event,eventClick e,Jpanel1BaiHat.SendBack sendBack,SongsPanel.SendSongs sendSongs) {
         this.event = event;
         this.eClick=e;
         this.sendBack=sendBack;
+        this.sendSongs= sendSongs;
         initComponents();
         initUI();
     }
@@ -58,7 +61,7 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
         jPanelListCaSi = new javax.swing.JPanel();
         jlabTenDanhSach = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-
+jPanelListCaSi.setBackground(Color.white);
         listresultPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanelTenDanhSach.setBackground(new java.awt.Color(255, 255, 255));
@@ -135,7 +138,15 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        eClick.sendClick();
+       String tmp=jlabTenDanhSach.getText();
+       if(tmp.contains("Thông tin bài hát:"))
+       {
+           eClick.backBaiHat();
+       }
+       else {
+           eClick.sendClick();
+       }
+
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -152,17 +163,39 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
     {String [] tmp = input.split("###");
      if(tmp[0].contains("RESULTSEARCHCASI"))
      {
-         loadData(input);
+         if(tmp[1].contains("{}"))
+         {
+             JOptionPane.showMessageDialog(null, "Không tim thấy thông tin.", "InfoBox: " + "titleBar", JOptionPane.INFORMATION_MESSAGE);
+         jButton1.setVisible(false);
+
+         }
+         else {
+             loadData(input);
+         }
+
      }
      if(tmp[0].contains("RESULTSEARCHBAIHAT"))
      {
-         loadBaiHatData(input);
+         if(tmp[1].contains("{}"))
+         {
+             JOptionPane.showMessageDialog(null, "Không tim thấy thông tin.", "InfoBox: " + "titleBar", JOptionPane.INFORMATION_MESSAGE);
+             jButton1.setVisible(false);
+         }
+         else {
+             loadBaiHatData(input);
+         }
+
      }
      if(tmp[0].contains("RESULTINFOCASI"))
      {
          System.out.println("đi tới chỗ này 1");
      loadThongTinCaSi(input);
      }
+        if(tmp[0].contains("RESULTINFOBAIHAT"))
+        {
+            System.out.println("đi tới chỗ này 1");
+            loadThongTinBaiHat(input);
+        }
         
     }
     private void load1BaiHat(String name,String link)
@@ -222,7 +255,9 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
             String tencasi = arr.getJSONObject(i).getString("artists_names");
             String anhcasi = arr.getJSONObject(i).getString("thumbnail");
             String infocasi = arr.getJSONObject(i).getString("info");;
-            jpanel.add(new SongsPanel(tenbaihat,anhcasi,infocasi,tencasi));
+            JPanel jPanel_tmp = new SongsPanel(tenbaihat,anhcasi,infocasi,tencasi,sendSongs);
+            jPanel_tmp.setBackground(Color.white);
+            jpanel.add(jPanel_tmp);
         }
         jButton1.setVisible(false);
         jPanelListCaSi.removeAll();
@@ -261,7 +296,16 @@ public class listResultPanel extends javax.swing.JPanel implements SongsPanelinA
     }
     private void loadThongTinBaiHat(String inputData)
     {
+        String[] tmp = inputData.split("###");
+        JSONObject obj = new JSONObject(tmp[1]);
+
+        JPanel jPanel= new AlbumSingsPanel(obj);
         jPanelListCaSi.removeAll();
+        jlabTenDanhSach.setText("Thông tin bài hát:");
+        jPanelListCaSi.setLayout(new GridLayout());
+        jPanelListCaSi.add(jPanel);
+        jPanelListCaSi.validate();
+        jPanelListCaSi.repaint();
         
     }
      private void showLoading() {

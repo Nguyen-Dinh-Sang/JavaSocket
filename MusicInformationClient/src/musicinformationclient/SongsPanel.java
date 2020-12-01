@@ -13,11 +13,16 @@ import musicinformationclient.socket.Images;
  * @author Administrator
  */
 public class SongsPanel extends javax.swing.JPanel {
-
+    private SendSongs sendSongs;
     /**
      * Creates new form SongsPanel
      */
-    public SongsPanel(String tenBaiHat, String image,String info , String tenCaSi) {
+    public interface SendSongs
+    {
+        void sendSong(String info);
+    }
+    public SongsPanel(String tenBaiHat, String image,String info , String tenCaSi,SendSongs sendSongs) {
+        this.sendSongs=sendSongs;
         initComponents();
         Images img = new Images();
         JPanel jPanel_tmp=img.show_image(image,100,100);
@@ -102,6 +107,7 @@ public class SongsPanel extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        sendSongs.sendSong(jLabelInfo.getText());
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

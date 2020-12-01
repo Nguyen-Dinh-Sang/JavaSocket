@@ -14,6 +14,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import musicinformationclient.socket.WebView;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -52,6 +53,12 @@ private SongsPanelinAlbum.SendLink sendLink;
         System.out.println("đi tới chỗ này 6");
         initComponents();
         add6Album(tenAlbum,array,add);
+    }
+    public AlbumSingsPanel(JSONObject obj) {
+
+        System.out.println("đi tới chỗ này 8");
+        initComponents();
+        loadThongtinbaihat(obj);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -126,8 +133,12 @@ private void loadThongTinCaSi(String name, String info) {
             jPanel_tmp_thongtin.add(jlabtt[i]);
             jPanel_tmp_thongtin.add(new JLabel("<html> <br></html>"));
         }
+        JTextArea jTextAreaTT= new JTextArea();
+        jTextAreaTT.setText(info);
+        jTextAreaTT.setLineWrap(true);
+        jTextAreaTT.setFont(new java.awt.Font("Tahoma", 0, 16));
         jLabelTenAlbum.setText("Thông tin ca sĩ:");
-    JScrollPane jScrollPane=new JScrollPane(jPanel_tmp_thongtin);
+    JScrollPane jScrollPane=new JScrollPane(jTextAreaTT);
     jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
     jPanelDanhSachAlBum.removeAll();
     jPanelDanhSachAlBum.setLayout(new GridLayout(1,1));
@@ -135,6 +146,50 @@ private void loadThongTinCaSi(String name, String info) {
 
     jPanelDanhSachAlBum.validate();
     jPanelDanhSachAlBum.repaint();
+    }
+    public void loadThongtinbaihat(JSONObject obj)
+    {
+        String name=obj.getJSONObject("data").getString("name");
+        String loibaihat=obj.getJSONObject("data").getString("lyrics");
+        String tennhacsi=obj.getJSONObject("data").getString("composerName");
+        String tencasi=obj.getJSONObject("data").getString("singerName");
+        String audio=obj.getJSONObject("data").getString("audio");
+        jLabelTenAlbum.setText("Tên bài hát :" + name+"    "+"Tên nhạc sĩ:"+tencasi+"    "+"Tên nhạc sĩ:"+tennhacsi);
+        JPanel jPanel_tmp= new JPanel();
+        jPanel_tmp.setLayout(new GridLayout(2,1));
+        String[] tmp=loibaihat.split("\\n<br>");
+        JPanel jPanel = new JPanel();
+        jPanel.setLayout(new GridLayout(tmp.length+1,1));
+        jPanel.add(new JLabel("Lời bài hát"));
+        for (int i=0;i<tmp.length;i++)
+        {
+            jPanel.add(new Label(tmp[i]));
+        }
+        jPanel.setBackground(Color.white);
+        //JScrollPane jScrollPane1= new JScrollPane(jPanel);
+        jPanel_tmp.add(jPanel);
+        JFXPanel jfxPanel1=new JFXPanel();
+        JFXPanel jfxPanel = new WebView(audio);
+
+        Platform.runLater( new Runnable ()  {
+            @Override
+            public void run()
+            {
+                javafx.scene.web.WebView webView = new javafx.scene.web.WebView();
+                jfxPanel1.setScene(new Scene(webView));
+                webView.getEngine().load(audio);
+                System.out.println("webview");
+            }
+
+        });
+        jPanel_tmp.add(jfxPanel);
+        JScrollPane jScrollPane = new JScrollPane(jPanel_tmp);
+        jScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+                jPanelDanhSachAlBum.removeAll();
+                jPanelDanhSachAlBum.setLayout(new GridLayout(1,1));
+                jPanelDanhSachAlBum.add(jScrollPane);
+                jPanelDanhSachAlBum.validate();
+                jPanelDanhSachAlBum.repaint();
     }
     private  void add6Album(String tenAlbum,JSONArray arr, String add)
     {
