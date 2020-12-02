@@ -1,0 +1,3 @@
+https://vi.wikipedia.org/w/api.php?format=json&action=query&prop=axtraacts&titles=....&redirect=true
+https://vi.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvsection=0&format=json&titles=pizza
+http://vi.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=cẩm%20ly

@@ -1,0 +1,49 @@
+{
+  "name": "sgu_laptrinhmang",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "babel-node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThanhHai99/SGU_LapTrinhMang.git"
+  },
+  "author": "ThanhHai99",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThanhHai99/SGU_LapTrinhMang/issues"
+  },
+  "homepage": "https://github.com/ThanhHai99/SGU_LapTrinhMang#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "cheerio": "^1.0.0-rc.3",
+    "cli-table": "^0.3.1",
+    "crypto": "^1.0.1",
+    "domutils": "^2.4.2",
+    "event": "^1.0.0",
+    "events": "^3.2.0",
+    "express": "^4.17.1",
+    "htmlparser2": "^5.0.0",
+    "http": "0.0.1-security",
+    "https": "^1.0.0",
+    "iconv-lite": "^0.6.2",
+    "isomorphic-fetch": "^3.0.0",
+    "khong-dau": "^2.0.0",
+    "locutus": "^2.0.14",
+    "lodash": "^4.17.20",
+    "node-fetch": "^2.6.1",
+    "parse5": "^6.0.1",
+    "pem": "^1.14.4",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "speakingurl": "^14.0.1",
+    "string_decoder": "^1.3.0",
+    "utf8": "^3.0.0",
+    "website-scraper": "^4.2.3"
+  },
+  "devDependencies": {}
+}
